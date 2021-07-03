@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org" lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="format-detection" content="telephone=no">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+              rel="stylesheet"
+              integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+              crossorigin="anonymous"
+        >
+        <title>US Covid 19 Spring Boot App</title>
+        <style>
+
+            :root {
+                --el-color: #e5dede;
+            }
+
+            body {
+                background-color: #151517;
+                color: var(--el-color);
+            }
+
+            .table-kun {
+                margin-top: 35px;
+                color: var(--el-color);
+            }
+
+            .err-text {
+                margin-top: 35px;
+                margin-bottom: 35px;
+            }
+
+            .us-stats-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 1fr 1fr;
+                align-items: center;
+                text-align: center;
+                margin-top: 50px;
+                margin-bottom: 50px;
+            }
+
+            .us-stats-item {
+                margin-left: auto;
+                margin-right: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container py-4">
+            <div class="p-3 mb-4 bg-dark rounded-3">
+                <h1>Covid 19 US Stats</h1>
+                <h4>Find all the latest covid data from the US</h4>
+                <div th:switch="${usStats.errorMessage == null}">
+                    <div th:case="${true}" class="us-stats-container mt-6">
+                        <div class="us-stats-item">
+                            <h1 class="display-4" th:text="${usStats.positive}"></h1>
+                            <p>Cases In the US</p>
+                        </div>
+                        <div class="us-stats-item">
+                            <h1 class="display-4" th:text="${usStats.positiveIncrease}"></h1>
+                            <p>New Cases In the US</p>
+                        </div>
+                        <div class="us-stats-item">
+                            <h1 class="display-4" th:text="${usStats.death}"></h1>
+                            <p>Deaths In the US</p>
+                        </div>
+                        <div class="us-stats-item">
+                            <h1 class="display-4" th:text="${usStats.deathIncrease}"></h1>
+                            <p>New Deaths In the US</p>
+                        </div>
+                    </div>
+                    <h4 class="err-text" th:case="*" th:text="${usStats.getErrorMessage}"></h4>
+                </div>
+                <p>Made With Spring Boot, Bootstrap, and Thymeleaf</p>
+            </div>
+            <div class="p-3 mb-4 bg-dark rounded-3">
+                <h1>Covid 19 US States Stats</h1>
+                <span>
+                    Data Fetched From:
+                    <a href="https://covidtracking.com/data/api/">
+                        covidtracking.com
+                    </a>
+                    (Results are not 100% accurate for states)
+                </span>
+                <br />
+                <div th:switch="${statesStats[0].errorMessage == null}">
+                    <table th:case="${true}" class="table table-kun">
+                        <tr>
+                            <th>State</th>
+                            <th>Cases</th>
+                            <th>+/-</th>
+                            <th>Deaths</th>
+                            <th>+/-</th>
+                        </tr>
+                        <tr th:each="state : ${statesStats}">
+                            <td th:text="${state.state}"></td>
+                            <td th:text="${state.positive}"></td>
+                            <td th:text="${state.positiveIncrease}"></td>
+                            <td th:text="${state.death}"></td>
+                            <td th:text="${state.deathIncrease}"></td>
+                        </tr>
+                    </table>
+                    <h4 class="err-text" th:case="*" th:text="${statesStats[0].errorMessage}"></h4>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
